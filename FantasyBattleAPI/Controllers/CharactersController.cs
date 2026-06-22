@@ -1,5 +1,7 @@
-﻿using FantasyBattleAPI.Services;
+﻿using FantasyBattleAPI.Models;
+using FantasyBattleAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace FantasyBattleAPI.Controllers
 {
@@ -9,9 +11,18 @@ namespace FantasyBattleAPI.Controllers
     {
         private CharacterStore _charactersStore;
 
-        public CharactersController(CharacterStore cs) {
+        public CharactersController(CharacterStore cs)
+        {
             _charactersStore = cs;
+
+        }
+        [HttpGet(Name = "GetCharacterList")]
+        public ActionResult<List<Character>> Get()
+        {
+
+            return Ok(_charactersStore.GetAllCharacters());
 
         }
     }
 }
+
