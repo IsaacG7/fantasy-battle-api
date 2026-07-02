@@ -24,6 +24,7 @@ namespace FantasyBattleAPI.Controllers
 
         }
 
+
         [HttpGet(Name = "GetCharacterList")]
         // ActionResult allows us to return the list of characters in JSON
         // Or error codes
@@ -31,6 +32,7 @@ namespace FantasyBattleAPI.Controllers
         {
             return Ok(_characterStore.GetAllCharacters());
         }
+
 
         [HttpGet("{id}", Name = "GetCharacterByID")]
         public ActionResult<Character> GetByID(int id)
@@ -46,18 +48,42 @@ namespace FantasyBattleAPI.Controllers
         }
 
 
-        
-        [HttpPost(Name ="CreateCharacter")]
+        [HttpPost(Name = "CreateCharacter")]
         public ActionResult<Character> CreateCharacter(Character ch)
         {
-            if(_characterStore.AddCharacter(ch)){
+            if (_characterStore.AddCharacter(ch))
+            {
 
                 // Returns 201(new resource created) with a Location header pointing to the new character's GET endpoint,
                 // and the newly created character in the response body.
-                return CreatedAtAction("GetByID", new {id = ch.Id}, ch);
+                return CreatedAtAction("GetByID", new { id = ch.Id }, ch);
             }
             return BadRequest($"Duplicate ID, Could not create character with ID {ch.Id}");
 
+        }
+
+
+        [HttpDelete("{id}", Name = "DeleteCharacterByID")]
+        public ActionResult DeleteCharacter(int id)
+        {
+            var result = _characterStore.RemoveCharacter(id);
+            if (result)
+            {
+                return NoContent();
+            }
+            return NotFound();
+        }
+
+        [HttpPut("{id}", Name = "UpdateCharacter")]
+        public ActionResult<Character> UpdateCharacter(int id, Character newCharacter)
+        {
+            var result = _characterStore.UpdateCharacter(id, newCharacter);
+
+            if (result)
+            {
+                return Ok(newCharacter);
+            }
+            return NotFound();
         }
     }
 }
