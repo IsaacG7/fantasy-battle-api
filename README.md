@@ -84,27 +84,13 @@ All endpoints are prefixed with `/api/Characters`.
 
 ---
 
-## Request & Response Examples
+## Request Examples
 
 ### Create a character — `POST /api/Characters`
 
 **Request body:**
 ```json
 {
-  "name": "Legolas",
-  "race": "Elf",
-  "characterClass": "Ranger",
-  "level": 10,
-  "hp": 120,
-  "attack": 35,
-  "defense": 20
-}
-```
-
-**Response — 201 Created:**
-```json
-{
-  "id": 1,
   "name": "Legolas",
   "race": "Elf",
   "characterClass": "Ranger",
@@ -128,8 +114,6 @@ Only include the fields you want to change. Omitted fields are left unchanged.
   "level": 11
 }
 ```
-
-**Response — 200 OK**
 
 ---
 
