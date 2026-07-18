@@ -1,5 +1,4 @@
 # fantasy-battle-api
-# Fantasy Battle API
 
 A RESTful API built with ASP.NET Core and Entity Framework Core as a learning project for backend web development. The API manages RPG characters with full CRUD support backed by a SQL Server database.
 
