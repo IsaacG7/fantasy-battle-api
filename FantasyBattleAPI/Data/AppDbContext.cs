@@ -7,7 +7,7 @@ namespace FantasyBattleAPI.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Character> characters { get; set; }
+        public DbSet<Character> Characters { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> contextOptions) : base(contextOptions) { }
 

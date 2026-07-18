@@ -2,7 +2,8 @@
 using FantasyBattleAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-
+using FantasyBattleAPI.DTOs;
+using Microsoft.AspNetCore.JsonPatch;
 namespace FantasyBattleAPI.Controllers
 {
     // This says this will be an api controller which gives us some 
@@ -13,14 +14,11 @@ namespace FantasyBattleAPI.Controllers
     [Route("api/[Controller]")]
     public class CharactersController : ControllerBase
     {
-        private CharacterStore _characterStore;
+        private CharacterServiceAgent _characterServiceAgent;
 
-        // Because we registered CharacterStore as a singleton (builder.Services.AddSingleton<CharacterStore>();)
-        // When the framework constructs this controller it looks for the CharacterStore
-        // in the DI container which provides the singleton object and it is injected through cs
-        public CharactersController(CharacterStore cs)
+        public CharactersController(CharacterServiceAgent cs)
         {
-            _characterStore = cs;
+            _characterServiceAgent = cs;
 
         }
 
@@ -30,14 +28,14 @@ namespace FantasyBattleAPI.Controllers
         // Or error codes
         public ActionResult<List<Character>> GetAll()
         {
-            return Ok(_characterStore.GetAllCharacters());
+            return Ok(_characterServiceAgent.GetAllCharacters());
         }
 
 
         [HttpGet("{id}", Name = "GetCharacterByID")]
         public ActionResult<Character> GetByID(int id)
         {
-            var character = _characterStore.GetCharacterById(id);
+            var character = _characterServiceAgent.GetCharacterById(id);
 
             if (character != null)
             {
@@ -49,41 +47,48 @@ namespace FantasyBattleAPI.Controllers
 
 
         [HttpPost(Name = "CreateCharacter")]
-        public ActionResult<Character> CreateCharacter(Character ch)
+        public ActionResult<Character> CreateCharacter(CreateCharacterDto c)
         {
-            if (_characterStore.AddCharacter(ch))
+            var character = new Character
             {
-
-                // Returns 201(new resource created) with a Location header pointing to the new character's GET endpoint,
-                // and the newly created character in the response body.
-                return CreatedAtAction("GetByID", new { id = ch.Id }, ch);
+                Hp = c.Hp,
+                Attack = c.Attack,
+                Defense = c.Defense,
+                Race = c.Race,
+                CharacterClass = c.CharacterClass,
+                Name = c.Name,
+                Level = c.Level,
+            };
+            if (_characterServiceAgent.AddCharacter(character))
+            {
+                return CreatedAtAction("GetByID", new { id = character.Id }, character);
             }
-            return BadRequest($"Duplicate ID, Could not create character with ID {ch.Id}");
+            return BadRequest();
 
         }
 
 
         [HttpDelete("{id}", Name = "DeleteCharacterByID")]
-        public ActionResult DeleteCharacter(int id)
+        public IActionResult DeleteCharacter(int id)
         {
-            var result = _characterStore.RemoveCharacter(id);
+            var result = _characterServiceAgent.RemoveCharacter(id);
             if (result)
             {
-                return NoContent();
+                return Ok();
             }
             return NotFound();
         }
 
-        [HttpPut("{id}", Name = "UpdateCharacter")]
-        public ActionResult<Character> UpdateCharacter(int id, Character newCharacter)
+        [HttpPatch("{id}", Name = "UpdateCharacter")]
+        public IActionResult UpdateCharacter(int id, [FromBody] PatchCharacterDto patchCharacter)
         {
-            var result = _characterStore.UpdateCharacter(id, newCharacter);
+            var result = _characterServiceAgent.UpdateCharacter(id, patchCharacter);
 
             if (result)
             {
-                return Ok(newCharacter);
+                return Ok();
             }
-            return NotFound();
+            return BadRequest();
         }
     }
 }

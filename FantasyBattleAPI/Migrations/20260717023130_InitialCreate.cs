@@ -11,7 +11,7 @@ namespace FantasyBattleAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "characters",
+                name: "Characters",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -26,7 +26,7 @@ namespace FantasyBattleAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_characters", x => x.Id);
+                    table.PrimaryKey("PK_Characters", x => x.Id);
                 });
         }
 
@@ -34,7 +34,7 @@ namespace FantasyBattleAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "characters");
+                name: "Characters");
         }
     }
 }

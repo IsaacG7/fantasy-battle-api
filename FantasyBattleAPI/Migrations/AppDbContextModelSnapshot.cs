@@ -55,7 +55,7 @@ namespace FantasyBattleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("characters");
+                    b.ToTable("Characters");
                 });
 #pragma warning restore 612, 618
         }

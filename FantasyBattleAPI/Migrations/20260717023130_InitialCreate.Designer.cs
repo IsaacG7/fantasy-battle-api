@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyBattleAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260703024854_InitialCreate")]
+    [Migration("20260717023130_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -58,7 +58,7 @@ namespace FantasyBattleAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("characters");
+                    b.ToTable("Characters");
                 });
 #pragma warning restore 612, 618
         }
